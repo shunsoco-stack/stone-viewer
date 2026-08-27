@@ -6,6 +6,9 @@
 実際の広告SDKや広告配信への接続はありません。
 石・アイコン・OG画像には、自作のコードと図形を使っています。
 
+- 公開サイト：[石を見る](https://stone-viewer-iota.vercel.app)
+- 公開リポジトリ：[shunsoco-stack/stone-viewer](https://github.com/shunsoco-stack/stone-viewer)
+
 ## 端末内の記録
 
 鑑賞時間などの記録は、ブラウザの`localStorage`の`stone-viewer:v1`へ保存します。
@@ -26,6 +29,7 @@ Vercel Web Analyticsを利用します。独自イベントは回転角度、モ
 
 Vercelの独自イベント集計はPro / Enterpriseプラン向けです。
 Hobby公開では`NEXT_PUBLIC_ENABLE_CUSTOM_EVENTS`を無効に保ち、追加課金の伴うアップグレードは行いません。
+公開先の無料Web Analyticsは有効化済みですが、独自3イベントの送信・集計は無効です。
 料金・利用制限は[公式文書](https://vercel.com/docs/analytics/limits-and-pricing)を確認してください。
 
 ## オフラインキャッシュ
@@ -58,8 +62,24 @@ node scripts/secret-scan.mjs --self-test
 - Git履歴、エンコード・暗号化された秘密情報、あらゆるサービスのトークンを網羅するものではありません。
 - 「検出なし」は「秘密情報が絶対に存在しない」という保証ではありません。
 
-公開前にはGitの差分と追跡ファイルを目視確認し、可能な場合はGitleaksなどの専用スキャナーも併用します。
-専用スキャナーの実行結果やGitHub上の設定は、実際に確認するまでは完了扱いにしません。
+公開・更新前にはGitの差分と追跡ファイルを目視確認し、Gitleaksなどの専用スキャナーも併用します。
+
+### 公開時の確認記録
+
+2026年8月27日に、次の結果を確認しました。
+
+| 確認項目 | 結果・対象 |
+| --- | --- |
+| Gitleaks 8.30.0 | 初回コミットのGit履歴スキャンで検出0件 |
+| プロジェクトの補助Secret Scan | 検出0件 |
+| 補助スキャナーのセルフテスト | 合成データによる9件の検証に成功 |
+| `npm audit` | このプロジェクトの依存関係で脆弱性報告0件 |
+| GitHub Secret Scanning | 有効 |
+| GitHub Push Protection | 有効 |
+| GitHubの未解決Secret Scanningアラート | 0件 |
+
+これらは確認時点・検査対象に対する結果です。以後の変更では、スキャンとCIを再実行してください。
+バイナリや全サービスの秘密形式まで網羅する保証ではありません。
 
 ### 秘密情報を入れないために
 
@@ -74,6 +94,15 @@ node scripts/secret-scan.mjs --self-test
 `.github/workflows/quality.yml`は、依存関係のインストール後にlint、型検査、テスト、スキャナーのセルフテスト、Secret Scan、本番ビルドを実行します。
 ワークフローのGitHub権限は`contents: read`に限定しています。
 自動デプロイに認証情報を直書きする処理は含みません。
+初回コミット`a478e2f`の[Quality & Secret Scanは成功しています](https://github.com/shunsoco-stack/stone-viewer/actions/runs/33040835487)。
+最新状態は[ワークフローの実行履歴](https://github.com/shunsoco-stack/stone-viewer/actions/workflows/quality.yml)を参照してください。
+E2E・公開後のPWA検証・実OSへのインストールは、このCIの検査範囲とは別です。
+
+## 公開経路
+
+Vercelプロジェクト`stone-viewer`はHobbyプランで、Vercel CLIによる手動デプロイで公開しています。
+GitHubとの自動デプロイ連携は接続が完了していません。GitHubへのpushだけで本番サイトが更新される状態ではありません。
+デプロイ時の認証はVercel CLI側で管理し、リポジトリへ認証情報を含めません。
 
 ## 報告時の注意
 

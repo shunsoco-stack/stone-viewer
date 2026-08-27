@@ -184,7 +184,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 /* The native dialog provides focus containment, Escape and inert background. */
 .gallery-dialog { max-width: min(500px, calc(100vw - 36px)); width: 500px; max-height: calc(100dvh - 48px); margin: auto; padding: 0; border: 1px solid var(--line); border-radius: 22px; color: var(--foreground); background: var(--panel); box-shadow: 0 25px 100px #10200822; overscroll-behavior: contain; scrollbar-width: thin; }
 .gallery-dialog[open] { animation: dialog-appear .3s ease-out; }
-.gallery-dialog::backdrop { background: #1c261b5c; backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); }
+.gallery-dialog::backdrop { background: #1c261b5c; -webkit-backdrop-filter: blur(9px); backdrop-filter: blur(9px); }
 .dialog-inner { position: relative; padding: 50px 40px 35px; text-align: center; }
 .dialog-close { position: absolute; right: 12px; top: 12px; width: 34px; height: 34px; }
 .gallery-dialog h2 { font-family: var(--serif); font-size: 31px; line-height: 1.65; font-weight: 400; letter-spacing: .07em; margin-top: 15px; }
@@ -348,7 +348,9 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  /* Fully disable transitions: even a tiny inherited-color transition can
+     delay dark-mode contrast across multiple descendant rendering frames. */
+  *, *::before, *::after { animation: none !important; transition: none !important; }
   button:active:not(:disabled) { transform: none; }
 }
 @media (prefers-reduced-transparency: reduce) {

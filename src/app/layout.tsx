@@ -3,7 +3,7 @@ import { AnalyticsProvider } from "@/components/analytics-provider";
 import { PwaRegistration } from "@/components/pwa-registration";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stone-viewer.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stone-viewer-iota.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -1,0 +1,46 @@
+{
+  "sourceURL": "https://stone-viewer-iota.vercel.app",
+  "viewport": {
+    "width": 1440,
+    "height": 1200
+  },
+  "browser": "Playwright Chromium",
+  "screenshots": [
+    {
+      "file": "01-initial.png",
+      "label": "石の初期画面",
+      "capturedAt": "2026-08-27T05:02:51.992Z",
+      "renderer": "webgl",
+      "degrees": "0"
+    },
+    {
+      "file": "02-one-degree.png",
+      "label": "1度回転した画面",
+      "capturedAt": "2026-08-27T05:02:53.360Z",
+      "renderer": "webgl",
+      "degrees": "1"
+    },
+    {
+      "file": "03-ad-performance.png",
+      "label": "5秒間の広告風演出",
+      "capturedAt": "2026-08-27T05:02:55.664Z",
+      "renderer": "webgl",
+      "degrees": "1"
+    },
+    {
+      "file": "04-full-circle.png",
+      "label": "実際に360回動かした一周記念",
+      "capturedAt": "2026-08-27T05:03:54.864Z",
+      "renderer": "webgl",
+      "degrees": "360"
+    },
+    {
+      "file": "05-zen.png",
+      "label": "夜の展示室の禅モード",
+      "capturedAt": "2026-08-27T05:03:57.584Z",
+      "renderer": "webgl",
+      "degrees": "360"
+    }
+  ],
+  "browserErrors": []
+}

@@ -2,13 +2,13 @@
 
 - アプリ名：石を見る
 - リポジトリ名：`stone-viewer`
-- 公開URL：公開後に記載
-- GitHub URL：公開後に記載
+- 公開URL：[石を見る](https://stone-viewer-iota.vercel.app)
+- GitHub URL：[shunsoco-stack/stone-viewer](https://github.com/shunsoco-stack/stone-viewer)
 - URL SLUG：`stone-viewer`
 - Tsukutta掲載状況：**未掲載**
 
 以下は掲載用の原稿です。投稿・掲載済みであることを示すものではありません。
-公開URLとGitHub URLが確定したら差し替えてください。
+アプリとGitHubリポジトリは公開済みです。Tsukutta・YOUTRUSTへの投稿はまだ行っていません。
 
 ## ポートフォリオ文
 
@@ -50,7 +50,7 @@ WebGLを使えない環境ではSVG表示へ切り替え、小さな体験を広
 石はコードから生成したオリジナル。禅モード、ダークモード、スマートフォン表示、PWAにも対応しています。
 急がなくていい用事を、ひとつどうぞ。
 
-公開URL：公開後に記載
+公開URL：https://stone-viewer-iota.vercel.app
 
 ## タグ5個
 
@@ -74,8 +74,8 @@ Next.js × TypeScript × Three.jsで、石の形状も質感もコードから�
 「何もしない」を気持ちよくするUIと、端末を選ばない3D表現を考える、楽しい制作でした。
 仕事の合間に、よかったら1度だけどうぞ。
 
-公開URL：公開後に記載
-GitHub URL：公開後に記載
+公開URL：https://stone-viewer-iota.vercel.app
+GitHub URL：https://github.com/shunsoco-stack/stone-viewer
 
 #個人開発 #フロントエンド #Nextjs #Threejs #UIUX
 

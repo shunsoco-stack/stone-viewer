@@ -8,11 +8,12 @@
 
 ![石を見るのOG画像](public/og.png)
 
-- 公開URL：公開後に記載
-- GitHub：公開後に記載
+- 公開URL：[石を見る](https://stone-viewer-iota.vercel.app)
+- GitHub：[shunsoco-stack/stone-viewer](https://github.com/shunsoco-stack/stone-viewer)（公開リポジトリ）
 - リポジトリ名：`stone-viewer`
 - 紹介文・投稿用コピー：[docs/publish-copy.md](docs/publish-copy.md)
 - セキュリティ・データの扱い：[docs/security.md](docs/security.md)
+- 公開時の実測・検証結果：[docs/verification.md](docs/verification.md)
 
 ## できること
 
@@ -117,7 +118,9 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-各コマンドの成功は、実行結果を確認した時点で判断してください。ワークフローの追加だけでCI通過済みとは扱いません。
+初回コミット`a478e2f`の[GitHub Actions実行は成功しています](https://github.com/shunsoco-stack/stone-viewer/actions/runs/33040835487)。
+変更後の状態は[最新のCI実行](https://github.com/shunsoco-stack/stone-viewer/actions/workflows/quality.yml)で確認してください。
+このCIはlint・型検査・ユニットテスト・Secret Scan・ビルドを対象とし、E2Eや公開後のPWA検証は別途実行します。
 
 ### アセットの再生成
 
@@ -164,7 +167,16 @@ Three.jsの遅延読み込み用チャンクが未取得の場合は、SVGの石
 4. オンラインへ戻して再読み込みし、新しい表示と通信へ復帰することを確認します。
 5. 対応ブラウザのホーム画面追加と、追加後のstandalone表示を確認します。
 
-Service Workerの処理テストだけでは、実ブラウザでのインストール・オフライン起動まで検証したことにはなりません。
+Playwrightによる自動検証は、次のコマンドで実行できます。
+
+```sh
+node scripts/verify-pwa.mjs https://stone-viewer-iota.vercel.app
+```
+
+結果は既定で`.local/pwa-verification.json`へ保存します。第2引数でレポートの保存先を指定できます。
+manifest・アイコン寸法・セキュリティヘッダー・Chromiumのインストール要件を確認し、通常のHTTPキャッシュを無効にした状態で、オフライン再読み込み・1度の回転・記録保持・未取得のThree.jsチャンクのSVGフォールバック・再接続を検査します。
+最新の実行結果はレポートの`result`と各`checks`を確認してください。
+**実際のOSへのインストールとstandaloneウィンドウの起動は未検証です。** また、異なるリリース間での更新再現はこのスクリプトの検証範囲に含みません。
 画像やキャッシュ方針を変更するリリースでは、`public/sw.js`の`CACHE`バージョンも更新してください。旧キャッシュは新しいService Workerの有効化時に整理します。
 
 ### 描画の互換性
@@ -197,7 +209,8 @@ WebGLの初期化失敗やコンテキスト喪失などで立体表示を続け
 このプロジェクトでは有料プランへの変更、有料アドオンの追加、トライアル開始は行いません。
 Hobbyではページビュー計測と、アプリ内のローカル鑑賞記録を利用します。
 
-Vercelのプロジェクト設定でWeb Analyticsを有効にする必要があります。
+公開先のVercelプロジェクト`stone-viewer`はHobbyプランで、無料枠のWeb Analyticsを有効化済みです。
+別のプロジェクトへ移す場合は、そのプロジェクトの設定でもWeb Analyticsを有効にしてください。
 送信コードの実装と、Vercelダッシュボード上での受信確認は別の確認事項です。
 ブラウザの追跡防止設定やオフライン状態によって、計測は送信されない場合があります。
 `Do Not Track`が有効な場合は送信せず、ページビューのURLからクエリとハッシュを取り除きます。
@@ -205,19 +218,60 @@ Vercelのプロジェクト設定でWeb Analyticsを有効にする必要があ�
 
 ## 公開
 
-このディレクトリを独立したGitリポジトリとして扱います。親フォルダの別プロジェクトを含めないでください。
+GitHubの公開リポジトリと、Vercelの本番サイトを公開しています。
 
-1. 品質チェックとSecret Scanを実行します。
-2. `stone-viewer`をGitHubの公開リポジトリとして作成します。
-3. VercelへこのリポジトリをImportし、Framework PresetをNext.js、Node.jsを24に設定します。
-4. 環境変数を利用する場合は`.env.example`を参照します。秘密情報を公開リポジトリへコミットしないでください。
-5. Production URLで表示、回転、広告風演出、保存、共有、PWAの動作を確認します。
-6. 公開URL上でPlaywrightのスクリーンショットを5枚撮影し、以下の画像を更新します。
+- Vercelプロジェクト：`stone-viewer`（Next.js / Node.js 24）
+- 本番サイト：[https://stone-viewer-iota.vercel.app](https://stone-viewer-iota.vercel.app)
+- ソースコード：[https://github.com/shunsoco-stack/stone-viewer](https://github.com/shunsoco-stack/stone-viewer)
+
+**現在の公開経路はVercel CLIによる手動デプロイです。** GitHubリポジトリとの自動デプロイ連携は接続が完了していません。
+GitHubへpushすると品質チェックは実行されますが、それだけではVercelの本番サイトは更新されません。
+
+### 更新・再デプロイ
+
+このリポジトリのルートで実行します。親フォルダの別プロジェクトを含めないでください。
+
+```sh
+npm ci
+npm run verify
+npm run test:e2e
+```
+
+Vercel CLIを初めて使う環境では、認証後に`npx vercel link`で**既存の`stone-viewer`プロジェクト**を選択します。
+
+```sh
+npx vercel login
+npx vercel link
+```
+
+正しいアカウント・プロジェクトへの接続を確認してから、本番へデプロイします。
+
+```sh
+npx vercel --prod
+```
+
+環境変数は`.env.example`を参照してください。`NEXT_PUBLIC_SITE_URL`は公開URL、`NEXT_PUBLIC_ENABLE_CUSTOM_EVENTS`はHobbyで`false`に設定します。
+`.env*`や`.vercel/`の認証・設定ファイルはコミットしません。
+デプロイ後は本番の操作を再検証し、次のスクリーンショットとPWAレポートを更新してください。
 
 ## スクリーンショット
 
-公開後のProduction URLをPlaywrightで撮影するための保存先です。
-**現時点では撮影前です。画像の追加・本番での検証後に、この注記を更新します。**
+公開済みのProduction URL上で、Playwright Chromiumを使って撮影した5枚です。
+撮影元URL、撮影時刻、画面サイズ、レンダラー、累計角度、ブラウザエラーの記録は[docs/screenshots.json](docs/screenshots.json)に保存しています。
+
+撮影は独立したテスト用ブラウザで行い、再現可能な石を0度から表示します。
+回転はすべてUI操作で、**0度 → 1度 → 5秒の広告風演出を完了して2度 → さらに358回押して360度**と進めます。
+一周記念を閉じたあと、夜の展示室へ切り替え、禅モードを撮影します。
+
+再撮影コマンド：
+
+```sh
+npx playwright install chromium
+npm run screenshots -- https://stone-viewer-iota.vercel.app
+```
+
+画像は`public/screenshots/`へ、撮影記録は`docs/screenshots.json`へ上書き保存します。
+UIを更新した場合は再撮影し、画像と記録を一緒にコミットしてください。
 
 ### 1. 石の初期画面
 

@@ -14,7 +14,7 @@ const screenshots = [];
 const errors = [];
 
 try {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 1100 }, colorScheme: "light", deviceScaleFactor: 1, locale: "ja-JP", timezoneId: "Asia/Tokyo" });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1200 }, colorScheme: "light", deviceScaleFactor: 1, locale: "ja-JP", timezoneId: "Asia/Tokyo" });
   // A fresh, isolated visitor profile chooses a reproducible original stone.
   // No app code, angle shortcut, query-only demo, or DOM replacement is used.
   await context.addInitScript(() => {
@@ -44,6 +44,7 @@ try {
   await page.getByRole("button", { name: "広告風モード 5s" }).click();
   await page.getByTestId("rotate-button").click();
   await expect(page.getByText("これは広告風演出です", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCSS("opacity", "1");
   await capture("03-ad-performance.png", "5秒間の広告風演出");
   const reward = page.getByRole("dialog").getByRole("button", { name: "石を1度動かす 1°" });
   await expect(reward).toBeEnabled({ timeout: 8_000 });
@@ -56,6 +57,7 @@ try {
     if (count % 90 === 0) console.log(`Actual rotation buttons: ${count}/360`);
   }
   await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCSS("opacity", "1");
   await expect(page.getByTestId("total-degrees")).toHaveText("360");
   await expect(page.getByTestId("stone-scene")).toHaveAttribute("data-rendered-angle", "360", { timeout: 5_000 });
   await capture("04-full-circle.png", "実際に360回動かした一周記念");
@@ -65,6 +67,8 @@ try {
   await page.getByRole("button", { name: "禅モードに入る", exact: true }).click();
   await expect(page.locator('[data-zen="true"]')).toBeVisible();
   await expect(page.getByRole("button", { name: /禅モードを終了/ })).toBeVisible();
+  await expect(page.locator(".viewer")).toHaveCSS("background-color", "rgb(21, 24, 21)");
+  await expect(page.getByTestId("stone-scene")).toHaveAttribute("data-renderer", "webgl");
   await capture("05-zen.png", "夜の展示室の禅モード");
   await context.close();
 } finally {
@@ -73,5 +77,5 @@ try {
 
 if (errors.length) throw new Error(`Browser errors: ${errors.join("; ")}`);
 await mkdir(path.resolve("docs"), { recursive: true });
-await writeFile(path.resolve("docs/screenshots.json"), JSON.stringify({ sourceURL: url.origin, viewport: { width: 1440, height: 1100 }, browser: "Playwright Chromium", screenshots, browserErrors: errors }, null, 2) + "\n");
+await writeFile(path.resolve("docs/screenshots.json"), JSON.stringify({ sourceURL: url.origin, viewport: { width: 1440, height: 1200 }, browser: "Playwright Chromium", screenshots, browserErrors: errors }, null, 2) + "\n");
 console.log(`Saved ${screenshots.length} production screenshots to public/screenshots/`);
