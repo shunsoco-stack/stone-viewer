@@ -215,7 +215,7 @@ export function StoneViewer() {
       </main>
 
       <footer className="gallery-footer gallery-ui">
-        <div className="footer-left"><span className="footer-brand">石を見る</span><span className="footer-dot">·</span><button className="text-button" onClick={() => setAbout(true)}>この場所について</button></div>
+        <div className="footer-left"><span className="footer-brand">石を見る</span><span className="footer-dot">·</span><button className="text-button" onClick={() => setAbout(true)}>この場所について</button><a className="text-button" href="/privacy">プライバシーポリシー</a></div>
         <div className="footer-right"><button className="text-button quality-button" aria-pressed={quality === "lite"} onClick={() => { session.setQuality(quality === "lite" ? "auto" : "lite"); notify(quality === "lite" ? "お使いの端末に合わせて表示します。" : "軽量なSVG表示に切り替えました。"); }} title="WebGLを使わない軽量なSVG表示に切り替える"><Icon name="leaf" width="14" height="14" /><span>{quality === "lite" ? "軽量表示中" : renderer === "svg" && ready ? "SVG表示" : "軽量表示"}</span></button><button className="text-button share-button" onClick={share} aria-label="この静けさを共有"><Icon name="share" width="15" height="15" />この静けさを共有</button></div>
       </footer>
 
